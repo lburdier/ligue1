@@ -1,0 +1,204 @@
+/* Typographie de base */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+.card {
+    background-color: #f8f9fa;
+    border: 1px solid #dfdfdf; /* Bordure bleue */
+    border-radius: 10px; /* Bordures arrondies */
+}
+
+.card-title {
+    color: #000; /* Couleur du titre */
+}
+
+.custom-jumbotron {
+    background-color: #ffffff; /* Couleur de fond blanche */
+    border: 1px solid #dfdfdf; /* Bordure bleue */
+    border-radius: 15px; /* Bordures arrondies */
+    transition: transform 0.3s; /* Transition pour l'effet de survol */
+}
+
+.custom-jumbotron:hover {
+    transform: scale(1.02); /* Légère augmentation de taille au survol */
+}
+
+.custom-jumbotron h1 {
+    color: #000; /* Couleur du titre */
+}
+
+.custom-jumbotron p {
+    color: #555; /* Couleur du texte */
+}
+
+.btn-details {
+    background-color: #6c757d; /* Couleur de fond par défaut */
+    color: white; /* Couleur du texte */
+    border: 2px solid transparent; /* Bordure par défaut */
+    border-radius: 5px; /* Coins arrondis */
+    padding: 10px 20px; /* Espacement interne */
+    transition: background-color 0.3s, border-color 0.3s, transform 0.3s; /* Transitions */
+}
+
+.btn-details:hover {
+    background-color: #ffff; /* Couleur de fond au survol */
+    text-decoration: none; /* Pas de soulignement */
+    border-color: #000; /* Couleur de bordure au survol */
+    transform: scale(1.05); /* Légère augmentation de la taille */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre au survol */
+}
+
+/* Style global pour les titres et les textes */
+h1, h2, h3 {
+    color: #1f3c88;
+    margin-bottom: 20px;
+}
+
+p {
+    margin-bottom: 20px;
+    color: #555;
+}
+
+/* Style pour le conteneur principal */
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Style de la barre de navigation */
+.navbar {
+    background-color: #ffffff;
+    border-bottom: 2px solid #e0e0e0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .navbar-brand {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1f3c88;
+}
+
+.navbar .nav-link {
+    color: #555;
+    margin-right: 15px;
+    transition: color 0.3s ease-in-out;
+}
+
+.navbar .nav-link:hover {
+    color: #1f3c88;
+}
+
+.navbar .nav-item.active .nav-link {
+    color: #1f3c88;
+    font-weight: bold;
+}
+
+/* Style des boutons */
+.btn {
+    display: inline-block;
+    font-size: 16px;
+    padding: 10px 20px;
+    margin: 10px 0;
+    background-color: #1f3c88;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background-color: #1554b4;
+}
+
+.btn.btn-primary.btn-margin-bottom {
+    margin: 5px !important; /* Force l'application de cette marge */
+}
+
+
+/* Style des formulaires */
+form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+}
+
+input[type="submit"], button {
+    background-color: #1f3c88;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover, button:hover {
+    background-color: #1554b4;
+}
+
+/* Style des messages d'erreur et de succès */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Footer simple */
+footer {
+    background-color: #1f3c88;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+/* Style des liens du footer */
+footer a {
+    color: #fff;
+    text-decoration: none;
+    padding: 0 10px;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsivité pour mobile */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+    }
+
+    .navbar .nav-link {
+        margin-right: 0;
+    }
+}

@@ -1,0 +1,7 @@
+# Activer le moteur de réécriture d'URL
+RewriteEngine On
+
+# Rediriger toutes les demandes vers /test/index.php sauf pour les fichiers et répertoires existants
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /ligue1/index.php [L,QSA]
