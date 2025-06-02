@@ -199,7 +199,7 @@ class GestionUtilisateur {
     public function resetLoginAttempts($email) {
         try {
             $sql = "UPDATE utilisateur 
-                    SET tentatives_connexion = 0, derniere_tentative = NULL 
+                    SET tentatives_connexion = 0, derniere_tntative = NULL 
                     WHERE mail_uti = ?";
             $stmt = $this->cnx->prepare($sql);
             $stmt->execute([$email]);
@@ -277,5 +277,103 @@ class GestionUtilisateur {
             error_log("Erreur lors de la vérification de l'IP bannie $ip : " . $e->getMessage());
             return ['banni' => false];
         }
+    }
+
+    // Vérifier si l'utilisateur est banni via son IP
+    public function isUserBannedByIP($ip) {
+        try {
+            $sql = "SELECT banni_jusqu_a FROM banni_ips WHERE ip = :ip AND banni_jusqu_a > NOW()";
+            $stmt = $this->cnx->prepare($sql);
+            $stmt->bindParam(':ip', $ip, PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($result) {
+                return $result['banni_jusqu_a']; // Retourne la date de fin du bannissement
+            }
+            return null; // Pas de bannissement actif
+        } catch (PDOException $e) {
+            error_log("Erreur lors de la vérification du bannissement par IP : " . $e->getMessage());
+            return null;
+        }
+    }
+
+    public function updateUserRole($id, $role) {
+        try {
+            $query = $this->cnx->prepare("UPDATE utilisateur SET role_uti = :role WHERE id_uti = :id");
+            $query->execute(['role' => $role, 'id' => $id]);
+            return true;
+        } catch (Exception $e) {
+            error_log("Erreur lors de la mise à jour du rôle de l'utilisateur : " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function banUserById($userId, $durationInDays) {
+        try {
+            $query = "UPDATE utilisateur SET banni_jusqu_a = DATE_ADD(NOW(), INTERVAL :duration DAY) WHERE id_uti = :id";
+            $stmt = $this->cnx->prepare($query);
+            $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+            $stmt->bindParam(':duration', $durationInDays, PDO::PARAM_INT);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Erreur lors du bannissement de l'utilisateur : " . $e->getMessage());
+        }
+    }
+
+    public function suivreClub($idUtilisateur, $idClub) {
+        try {
+            $query = "INSERT INTO utilisateur_club (id_utilisateur, id_club, etat) 
+                      VALUES (:id_utilisateur, :id_club, TRUE)
+                      ON CONFLICT (id_utilisateur, id_club) DO UPDATE SET etat = TRUE";
+            $stmt = $this->cnx->prepare($query);
+            $stmt->bindParam(':id_utilisateur', $idUtilisateur, PDO::PARAM_INT);
+            $stmt->bindParam(':id_club', $idClub, PDO::PARAM_INT);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            error_log("Erreur lors de l'ajout du suivi du club : " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function getClubsSuivis($idUtilisateur) {
+        try {
+            $query = "SELECT id_club FROM suivi WHERE id_utilisateur = ?";
+            $stmt = $this->cnx->prepare($query);
+            $stmt->execute([$idUtilisateur]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Erreur lors de la récupération des clubs suivis : " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function nePlusSuivreClub($idUtilisateur, $idClub) {
+        try {
+            $query = "UPDATE utilisateur_club SET etat = FALSE 
+                      WHERE id_utilisateur = :id_utilisateur AND id_club = :id_club";
+            $stmt = $this->cnx->prepare($query);
+            $stmt->bindParam(':id_utilisateur', $idUtilisateur, PDO::PARAM_INT);
+            $stmt->bindParam(':id_club', $idClub, PDO::PARAM_INT);
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            error_log("Erreur lors de la suppression du suivi du club : " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Check if a user is already following a club.
+     *
+     * @param int $idUtilisateur
+     * @param int $idClub
+     * @return bool
+     */
+    public function isFollowingClub($idUtilisateur, $idClub) {
+        $stmt = $this->cnx->prepare("SELECT COUNT(*) FROM v_club WHERE id_utilisateur = :idUtilisateur AND id_club = :idClub");
+        $stmt->execute(['idUtilisateur' => $idUtilisateur, 'idClub' => $idClub]);
+        return $stmt->fetchColumn() > 0;
     }
 }

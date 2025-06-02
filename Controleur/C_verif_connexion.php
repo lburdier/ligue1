@@ -44,6 +44,9 @@ try {
             'message' => "Votre session est invalide. Veuillez vous reconnecter."
         ]);
         exit;
+    } else {
+        // Stocker le rôle utilisateur dans la session
+        $_SESSION['user']['role'] = $utilisateur['role_uti'];
     }
 } catch (Exception $e) {
     error_log("Erreur lors de la vérification de l'utilisateur connecté : " . $e->getMessage());
@@ -58,6 +61,7 @@ try {
 return [
     'id' => $utilisateur['id_uti'],
     'prenom' => $utilisateur['prenom_uti'],
-    'nom' => $utilisateur['nom_uti']
+    'nom' => $utilisateur['nom_uti'],
+    'role' => $utilisateur['role_uti']
 ];
 ?>

@@ -39,6 +39,21 @@
             <p><strong>Email :</strong> <?php echo htmlspecialchars($utilisateur['mail_uti']); ?></p>
             <p><strong>Sexe :</strong> <?php echo htmlspecialchars($utilisateur['sexe_uti']); ?></p>
             <p><strong>Date d'inscription :</strong> <?php echo htmlspecialchars($utilisateur['date_inscription']); ?></p>
+            <p><strong>Statut :</strong> 
+                <?php 
+                switch ($utilisateur['role_uti']) {
+                    case 'createur':
+                        echo '<span style="color: green; font-weight: bold;">Rédacteur d\'articles</span>';
+                        break;
+                    case 'commentateur':
+                        echo '<span style="color: blue; font-weight: bold;">Commentateur</span>';
+                        break;
+                    default:
+                        echo '<span style="color: gray;">Utilisateur standard</span>';
+                        break;
+                }
+                ?>
+            </p>
 
             <h3>Changer d'avatar :</h3>
             <form action="/ligue1/update_avatar" method="POST">
@@ -70,6 +85,14 @@
                 <button type="submit" class="btn btn-danger mt-3">Supprimer mon compte</button>
             </form>
 
+            <!-- Section pour devenir rédacteur d'articles -->
+            <form action="/ligue1/c_demande_confirmation.php" method="POST">
+                <div class="mb-3">
+                    <label for="role_createur" class="form-label">Voulez-vous devenir rédacteur d'articles ?</label>
+                    <input type="checkbox" id="role_createur" name="role_createur" value="rédacteur d'articles" <?php echo ($utilisateur['role_uti'] === 'rédacteur d\'articles') ? 'checked' : ''; ?>>
+                </div>
+                <button type="submit" class="btn btn-primary">Mettre à jour</button>
+            </form>
 
             <a href="/ligue1/" class="btn btn-secondary mt-4">Retour à l'accueil</a>
         </div>

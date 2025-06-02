@@ -1,71 +1,69 @@
 <?php
+// Démarrer la mise en mémoire tampon de sortie
+ob_start();
+
+// Démarrer la session si elle n'est pas déjà active
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Vérifier si l'utilisateur est un administrateur
+if ($_SESSION['user']['role'] !== 'admin') {
+    http_response_code(403);
+    echo "Accès refusé : Vous n'avez pas les droits nécessaires pour accéder à cette page.";
+    exit;
+}
+
+// Inclure les fichiers nécessaires
 include_once __DIR__ . '/../Models/GestionBDD.php';
 include_once __DIR__ . '/../Models/GestionUtilisateur.php';
 
-// Vérifier si l'utilisateur est connecté et est administrateur
-if (!isset($_SESSION['user'])) {
-    echo "<script>window.location.href='/ligue1/connexion';</script>";
-    exit();
-}
+try {
+    // Connexion à la base de données
+    $gestionBDD = new GestionBDD("BD_ligue1");
+    $cnx = $gestionBDD->connect();
+    $gestionUtilisateur = new GestionUtilisateur($cnx);
 
-$gestionBDD = new GestionBDD();
-$cnx = $gestionBDD->connect();
-$gestionUtilisateur = new GestionUtilisateur($cnx);
+    // Récupérer la liste des utilisateurs
+    $utilisateurs = $gestionUtilisateur->getListUtilisateurs();
 
-// Récupérer la liste des utilisateurs
-$utilisateurs = $gestionUtilisateur->getListUtilisateurs(); // Assurez-vous que cette méthode renvoie bien un tableau non vide
-
-// Définir la date actuelle pour vérifier l'inactivité
-$currentDate = new DateTime();
-
-// Fonction pour vérifier l'inactivité (dernière connexion ou non connecté)
-function estInactif($dateInscription, $lastConnexion) {
-    global $currentDate;
-
-    // Convertir les dates en objets DateTime
-    $dateInscription = new DateTime($dateInscription);
-    $lastConnexion = $lastConnexion ? new DateTime($lastConnexion) : null;
-
-    // Condition 1 : Jamais connecté et plus de 3 mois après l'inscription
-    if (is_null($lastConnexion) && $currentDate->diff($dateInscription)->m >= 3) {
-        return true;
-    }
-
-    // Condition 2 : Dernière connexion il y a plus de 3 mois
-    if (!is_null($lastConnexion) && $currentDate->diff($lastConnexion)->m >= 3) {
-        return true;
-    }
-
-    return false;
-}
-
-// Vérifier si une requête POST est envoyée pour supprimer un utilisateur inactif
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id']) && !empty($_POST['id'])) {
-    $id = $_POST['id'];
-
-    // Supprimer uniquement si l'utilisateur est inactif
-    $utilisateur = $gestionUtilisateur->getUserById($id);
-
-    if ($utilisateur && estInactif($utilisateur['date_inscription'], $utilisateur['last_connexion'])) {
-        $success = $gestionUtilisateur->deleteUserById($id);
-
-        if ($success) {
-            echo "<script>alert('Utilisateur inactif supprimé avec succès.'); window.location.href='/ligue1/admin_m1';</script>";
-            exit();
+    // Ajouter les informations de bannissement pour chaque utilisateur
+    foreach ($utilisateurs as &$utilisateur) {
+        $ip = $utilisateur['ip'] ?? null; // Assurez-vous que l'IP est stockée pour chaque utilisateur
+        if ($ip) {
+            $banniJusquA = $gestionUtilisateur->isUserBannedByIP($ip);
+            $utilisateur['banni_jusqu_a'] = $banniJusquA;
         } else {
-            echo "<script>alert('Erreur lors de la suppression de l\'utilisateur.'); window.location.href='/ligue1/admin_m1';</script>";
-            exit();
+            $utilisateur['banni_jusqu_a'] = null;
         }
-    } else {
-        echo "<script>alert('Cet utilisateur n\'est pas inactif.'); window.location.href='/ligue1/admin_m1';</script>";
-        exit();
     }
+
+    // Supprimer un utilisateur si demandé
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user_id'])) {
+        $userId = intval($_POST['delete_user_id']);
+        $gestionUtilisateur->deleteUserById($userId);
+        $_SESSION['notification'] = "Utilisateur supprimé avec succès.";
+        echo "<script>window.location.href = '/ligue1/admin_m1';</script>";
+        exit;
+    }
+
+    // Bannir un utilisateur si demandé
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ban_user_id'])) {
+        $userId = intval($_POST['ban_user_id']);
+        $banDuration = intval($_POST['ban_duration']); // Durée en jours
+        $gestionUtilisateur->banUserById($userId, $banDuration);
+        $_SESSION['notification'] = "Utilisateur banni pour $banDuration jours.";
+        echo "<script>window.location.href = '/ligue1/admin_m1';</script>";
+        exit;
+    }
+} catch (Exception $e) {
+    error_log("Erreur lors de la gestion des utilisateurs : " . $e->getMessage());
+    $utilisateurs = [];
 }
 
-$pageTitle = "Tableau de Bord Admin";
-include './Vues/v_admin_dashboard_v2.php';
+// Inclure la vue du tableau de bord admin version 2
+include __DIR__ . '/../Vues/v_admin_dashboard_v2.php';
+
+// Libérer le tampon de sortie
+ob_end_flush();
 ?>

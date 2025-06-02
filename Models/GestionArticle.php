@@ -1,5 +1,8 @@
 <?php
 
+// Inclure la classe Article
+include_once __DIR__ . '/Article.php';
+
 class GestionArticle {
 
     private $cnx;
@@ -172,6 +175,19 @@ class GestionArticle {
         } catch (PDOException $e) {
             error_log('Erreur lors de la suppression de l\'article : ' . $e->getMessage());
             return false;
+        }
+    }
+
+    // Méthode pour récupérer tous les articles
+    public function getAllArticles() {
+        try {
+            $query = "SELECT id_article, titre, contenu, image, date_creation FROM article ORDER BY date_creation DESC";
+            $stmt = $this->cnx->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Erreur lors de la récupération des articles : " . $e->getMessage());
+            return [];
         }
     }
 }

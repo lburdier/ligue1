@@ -10,8 +10,8 @@ include_once __DIR__ . '/../Models/Article.php';
 include_once __DIR__ . '/../Models/GestionArticle.php';
 
 // Vérifier si l'utilisateur est connecté
-if (!isset($_SESSION['user'])) {
-    echo "<p>Erreur : Vous devez être connecté pour modifier un article.</p>";
+if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'rédacteur d\'articles') {
+    echo "<p>Erreur : Vous devez être connecté en tant que rédacteur d'articles pour modifier un article.</p>";
     exit;
 }
 

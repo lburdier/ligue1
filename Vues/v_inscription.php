@@ -1,56 +1,56 @@
 <?php
-// Démarrer la session si elle n'est pas déjà active
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Inclure le fichier de connexion à la base de données
-include_once __DIR__ . '/../Models/GestionBDD.php';
-include_once __DIR__ . '/../Models/GestionUtilisateur.php'; // Inclure la classe GestionUtilisateur
-// Instancier la classe GestionBDD et établir la connexion à la base de données
-$gestionBDD = new GestionBDD();
-$pdo = $gestionBDD->connect();
-
-if (!$pdo) {
-    die("Erreur de connexion à la base de données.");
-}
-
-// Instancier GestionUtilisateur pour vérifier l'existence de l'email
-$gestionUtilisateur = new GestionUtilisateur($pdo);
-
-// Initialiser les messages d'erreur
-$errorEmail = '';
-$errorIdClub = '';
-$erreurs = [];
-
-// Récupération des données du formulaire ou des variables de session
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // S'assurer que les champs sont définis avant de les stocker dans la session
-    $_SESSION['prenom'] = !empty($_POST['prenom']) ? htmlspecialchars(trim($_POST['prenom'])) : '';
-    $_SESSION['nom'] = !empty($_POST['nom']) ? htmlspecialchars(trim($_POST['nom'])) : '';
-    $_SESSION['email'] = !empty($_POST['email']) ? filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL) : '';
-    $_SESSION['sexe'] = $_POST['sexe'] ?? '';
-    $_SESSION['id_club'] = $_POST['id_club'] ?? '';
-    $_SESSION['image'] = $_POST['image'] ?? '';
-
-    // Vérification si l'email existe déjà
-    if (!empty($_SESSION['email']) && $gestionUtilisateur->emailExists($_SESSION['email'])) {
-        $errorEmail = 'Cet email est déjà utilisé.';
+    // Démarrer la session si elle n'est pas déjà active
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
     }
-}
 
-// Récupérer les valeurs de la session pour les réutiliser
-$prenom = $_SESSION['prenom'] ?? '';
-$nom = $_SESSION['nom'] ?? '';
-$email = $_SESSION['email'] ?? '';
-$sexe = $_SESSION['sexe'] ?? '';
-$id_club = $_SESSION['id_club'] ?? null;
-$image = $_SESSION['image'] ?? '';
+    // Inclure le fichier de connexion à la base de données
+    include_once __DIR__ . '/../Models/GestionBDD.php';
+    include_once __DIR__ . '/../Models/GestionUtilisateur.php'; // Inclure la classe GestionUtilisateur
+    // Instancier la classe GestionBDD et établir la connexion à la base de données
+    $gestionBDD = new GestionBDD();
+    $pdo        = $gestionBDD->connect();
 
-// Valider si id_club est sélectionné
-if (empty($id_club)) {
-    $errorIdClub = "Veuillez sélectionner un club."; // Ajoute un message d'erreur
-}
+    if (! $pdo) {
+        die("Erreur de connexion à la base de données.");
+    }
+
+    // Instancier GestionUtilisateur pour vérifier l'existence de l'email
+    $gestionUtilisateur = new GestionUtilisateur($pdo);
+
+    // Initialiser les messages d'erreur
+    $errorEmail  = '';
+    $errorIdClub = '';
+    $erreurs     = [];
+
+    // Récupération des données du formulaire ou des variables de session
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // S'assurer que les champs sont définis avant de les stocker dans la session
+        $_SESSION['prenom']  = ! empty($_POST['prenom']) ? htmlspecialchars(trim($_POST['prenom'])) : '';
+        $_SESSION['nom']     = ! empty($_POST['nom']) ? htmlspecialchars(trim($_POST['nom'])) : '';
+        $_SESSION['email']   = ! empty($_POST['email']) ? filter_var(trim($_POST['email']), FILTER_VALIDATE_EMAIL) : '';
+        $_SESSION['sexe']    = $_POST['sexe'] ?? '';
+        $_SESSION['id_club'] = $_POST['id_club'] ?? '';
+        $_SESSION['image']   = $_POST['image'] ?? '';
+
+        // Vérification si l'email existe déjà
+        if (! empty($_SESSION['email']) && $gestionUtilisateur->emailExists($_SESSION['email'])) {
+            $errorEmail = 'Cet email est déjà utilisé.';
+        }
+    }
+
+    // Récupérer les valeurs de la session pour les réutiliser
+    $prenom  = $_SESSION['prenom'] ?? '';
+    $nom     = $_SESSION['nom'] ?? '';
+    $email   = $_SESSION['email'] ?? '';
+    $sexe    = $_SESSION['sexe'] ?? '';
+    $id_club = $_SESSION['id_club'] ?? null;
+    $image   = $_SESSION['image'] ?? '';
+
+    // Valider si id_club est sélectionné
+    if (empty($id_club)) {
+        $errorIdClub = "Veuillez sélectionner un club."; // Ajoute un message d'erreur
+    }
 ?>
 
 <!DOCTYPE html>
@@ -100,7 +100,7 @@ if (empty($id_club)) {
         </style>
     </head>
     <body>
-
+    <?php include_once __DIR__ . '/../menu.php'; ?>
         <div class="container mt-5">
             <h1 class="mb-4">Inscription</h1>
 
@@ -120,15 +120,15 @@ if (empty($id_club)) {
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input class="form-control <?php echo!empty($errorEmail) ? 'email-error' : ''; ?>" 
-                           id="email" name="email" 
-                           value="<?php echo htmlspecialchars($email); ?>" 
-                           type="email" lang="fr" maxlength="254" 
-                           placeholder="example@domain.com" autocapitalize="off" spellcheck="false" 
-                           autocomplete="on" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|fr)$" 
+                    <input class="form-control                                               <?php echo ! empty($errorEmail) ? 'email-error' : ''; ?>"
+                           id="email" name="email"
+                           value="<?php echo htmlspecialchars($email); ?>"
+                           type="email" lang="fr" maxlength="254"
+                           placeholder="example@domain.com" autocapitalize="off" spellcheck="false"
+                           autocomplete="on" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|fr)$"
                            title="L'email doit commencer par des lettres ou des chiffres, suivi d'un @ et se terminer par .com ou .fr.">
 
-                    <span id="message-email" class="error"><?php echo!empty($errorEmail) ? $errorEmail : ''; ?></span>
+                    <span id="message-email" class="error"><?php echo ! empty($errorEmail) ? $errorEmail : ''; ?></span>
                 </div>
 
 
@@ -159,10 +159,10 @@ if (empty($id_club)) {
                 <div class="mb-3">
                     <label for="sexe" class="form-label">Sexe</label>
                     <select class="form-select" id="sexe" name="sexe" required>
-                        <option value="" disabled <?php echo ($sexe == '') ? 'selected' : ''; ?>>Choisissez votre sexe</option>
-                        <option value="Homme" <?php echo ($sexe == 'Homme') ? 'selected' : ''; ?>>Homme</option>
-                        <option value="Femme" <?php echo ($sexe == 'Femme') ? 'selected' : ''; ?>>Femme</option>
-                        <option value="Autre" <?php echo ($sexe == 'Autre') ? 'selected' : ''; ?>>Autre</option>
+                        <option value="" disabled                                                  <?php echo($sexe == '') ? 'selected' : ''; ?>>Choisissez votre sexe</option>
+                        <option value="Homme"                                              <?php echo($sexe == 'Homme') ? 'selected' : ''; ?>>Homme</option>
+                        <option value="Femme"                                              <?php echo($sexe == 'Femme') ? 'selected' : ''; ?>>Femme</option>
+                        <option value="Autre"                                              <?php echo($sexe == 'Autre') ? 'selected' : ''; ?>>Autre</option>
                     </select>
                     <span id="message-sexe" class="error"></span>
                 </div>
@@ -170,32 +170,36 @@ if (empty($id_club)) {
                 <div class="mb-3">
                     <label for="id_club" class="form-label">Choisissez votre club favori</label>
                     <select class="form-select" id="id_club" name="id_club" required>
-                        <option value="" disabled <?php echo ($id_club == '') ? 'selected' : ''; ?>>Sélectionnez un club</option>
-                        <?php if (!empty($tab)): ?>
-                            <?php foreach ($tab as $club): ?>
-                                <option value="<?php echo htmlspecialchars($club->getId()); ?>" <?php echo ($id_club == $club->getId()) ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($club->getNom()); ?> - <?php echo htmlspecialchars($club->getEmplacement()); ?> <?php echo htmlspecialchars($club->getLigue()); ?>
+                        <option value="" disabled                                                  <?php echo($id_club == '') ? 'selected' : ''; ?>>Sélectionnez un club</option>
+                        <?php if (! empty($tab)): ?>
+<?php foreach ($tab as $club): ?>
+                                <option value="<?php echo htmlspecialchars($club->getId()); ?>"<?php echo($id_club == $club->getId()) ? 'selected' : ''; ?>>
+                                    <?php echo htmlspecialchars($club->getNom()); ?> -<?php echo htmlspecialchars($club->getEmplacement()); ?><?php echo htmlspecialchars($club->getLigue()); ?>
                                 </option>
                             <?php endforeach; ?>
-                        <?php else: ?>
+<?php else: ?>
                             <option value="" disabled>Aucun club trouvé.</option>
                         <?php endif; ?>
                     </select>
                     <span id="message-id_club" class="error"></span>
                 </div>
 
-
                 <div class="mb-3">
                     <label for="avatar" class="form-label">Choisissez votre avatar</label><br>
-                    <input type="radio" id="avatar1" name="image" value="avatars/femelle.png" <?php echo ($image == 'avatars/femelle.png') ? 'checked' : ''; ?> required>
+                    <input type="radio" id="avatar1" name="image" value="avatars/femelle.png"                                                                                              <?php echo($image == 'avatars/femelle.png') ? 'checked' : ''; ?> required>
                     <label for="avatar1"><img src="avatars/femelle.png" alt="Avatar Femme" class="avatar"></label>
 
-                    <input type="radio" id="avatar2" name="image" value="avatars/pere.png" <?php echo ($image == 'avatars/pere.png') ? 'checked' : ''; ?> required>
+                    <input type="radio" id="avatar2" name="image" value="avatars/pere.png"                                                                                           <?php echo($image == 'avatars/pere.png') ? 'checked' : ''; ?> required>
                     <label for="avatar2"><img src="avatars/pere.png" alt="Avatar Homme" class="avatar"></label>
 
-                    <input type="radio" id="avatar3" name="image" value="avatars/profil.png" <?php echo ($image == 'avatars/profil.png') ? 'checked' : ''; ?> required>
+                    <input type="radio" id="avatar3" name="image" value="avatars/profil.png"                                                                                             <?php echo($image == 'avatars/profil.png') ? 'checked' : ''; ?> required>
                     <label for="avatar3"><img src="avatars/profil.png" alt="Avatar Profil" class="avatar"></label>
                     <span id="message-avatar" class="error"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="role_createur" class="form-label">Voulez-vous devenir rédacteur d'articles ?</label>
+                    <input type="checkbox" id="role_createur" name="role_createur" value="rédacteur d'articles">
                 </div>
 
                 <button type="submit" class="btn btn-primary" name="submit" value="submit">S'inscrire</button>

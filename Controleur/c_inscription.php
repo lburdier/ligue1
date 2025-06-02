@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $motdepasse = $_POST['motdepasse'] ?? '';
     $motdepasse_confirmation = $_POST['motdepasse_confirmation'] ?? '';  // Confirmation du mot de passe
     $sexe = $_POST['sexe'] ?? '';
+    $role = isset($_POST['role_createur']) ? 'rédacteur d\'articles' : 'rédacteur de commentaires';
 
     // ### Validation en PHP basée sur les `patterns` HTML ###
     // Validation du prénom : lettres uniquement, max 10 caractères
@@ -88,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Enregistrement dans la base de données si pas d'erreurs
     if (empty($erreurs) && !$emailExistant) {
         try {
-            $isInserted = $gestionUtilisateur->insertUser($id_club, $nom, $prenom, $sexe, $motdepasse, $imagePath, $email);
+            $isInserted = $gestionUtilisateur->insertUser($id_club, $nom, $prenom, $sexe, $motdepasse, $imagePath, $email, $role);
 
             if ($isInserted) {
                 $_SESSION['nom'] = $nom; // Stocker le nom dans la session

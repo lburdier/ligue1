@@ -28,4 +28,31 @@ class GestionClubs {
         }
         return $tabResultat;
     }
+
+    /**
+     * Get all clubs with their stadium details.
+     *
+     * @return array
+     */
+    public function getAllWithStades(): array {
+        $sql = "
+            SELECT 
+                c.id_club, 
+                c.nom_club, 
+                c.ligue_club, 
+                s.nom AS nom_stade, 
+                s.ville, 
+                s.capacite
+            FROM 
+                club c
+            LEFT JOIN 
+                stade s ON c.id_stade = s.id_stade
+            ORDER BY 
+                c.nom_club ASC
+        ";
+
+        $stmt = $this->cnx->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

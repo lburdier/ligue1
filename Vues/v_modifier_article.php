@@ -140,6 +140,11 @@
     <body>
         <div class="container_form">
             <h2>Modifier l'article</h2>
+            <?php if (!$isLoggedIn || $_SESSION['user']['role'] !== 'rédacteur de commentaires' && $_SESSION['user']['role'] !== 'rédacteur d\'articles') : ?>
+                <div class="alert alert-warning">
+                    Vous n'avez pas les droits pour ajouter des commentaires.
+                </div>
+            <?php endif; ?>
             <form method="post" action="/ligue1/c_update_article.php" class="responsive-form" enctype="multipart/form-data">
                 <input type="hidden" name="id_article" value="<?php echo $article->getId(); ?>">
                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">

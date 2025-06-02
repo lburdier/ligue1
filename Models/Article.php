@@ -8,7 +8,7 @@ class Article {
     private $categorie;
     private $image;
     private $dateCreation;
-    private $idUtilisateur; // Ajout de l'attribut propriétaire
+    private $idUtilisateur;
 
     public function __construct($id, $titre, $contenu, $categorie = null, $image = null, $dateCreation = null, $idUtilisateur = null) {
         $this->id = $id;
@@ -17,7 +17,7 @@ class Article {
         $this->categorie = $categorie;
         $this->image = $image;
         $this->dateCreation = $dateCreation;
-        $this->idUtilisateur = $idUtilisateur; // Initialisation de l'attribut propriétaire
+        $this->idUtilisateur = $idUtilisateur;
     }
 
     // Getters
@@ -46,7 +46,7 @@ class Article {
     }
 
     public function getIdUtilisateur() {
-        return $this->idUtilisateur; // Getter pour le propriétaire
+        return $this->idUtilisateur;
     }
 
     // Méthode pour récupérer un article par son ID
@@ -64,7 +64,7 @@ class Article {
                     $data['categorie'],
                     $data['image'],
                     $data['date_creation'],
-                    $data['id_uti'] // Ajout de l'attribut propriétaire
+                    $data['id_uti']
                 );
             }
             return null;
@@ -88,7 +88,7 @@ class Article {
                     $data['categorie'],
                     $data['image'],
                     $data['date_creation'],
-                    $data['id_uti'] // Ajout de l'attribut propriétaire
+                    $data['id_uti']
                 );
             }
 

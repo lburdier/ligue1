@@ -3,19 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/xampp/htdocs/ligue1/Models/GestionBDD.php</file>
             <file>file:/C:/xampp/htdocs/ligue1/Vues/v_voir_article.php</file>
-            <file>file:/C:/xampp/htdocs/ligue1/Controleur/c_update_article.php</file>
             <file>file:/C:/xampp/htdocs/ligue1/Models/Commentaire.php</file>
-            <file>file:/C:/xampp/htdocs/ligue1/.htaccess</file>
+            <file>file:/C:/xampp/htdocs/ligue1/Controleur/c_admin_dashboard.php</file>
+            <file>file:/C:/xampp/htdocs/ligue1/Vues/v_admin_dashboard_v2.php</file>
             <file>file:/C:/xampp/htdocs/ligue1/Controleur/c_create_commentaire.php</file>
             <file>file:/C:/xampp/htdocs/ligue1/Models/GestionArticle.php</file>
-            <file>file:/C:/xampp/htdocs/ligue1/Controleur/C_verif_connexion.php</file>
-            <file>file:/C:/xampp/htdocs/ligue1/Controleur/c_connexion.php</file>
-            <file>file:/C:/xampp/htdocs/ligue1/index.php</file>
-            <file>file:/C:/xampp/htdocs/ligue1/Controleur/c_voir_article.php</file>
+            <file>file:/C:/xampp/htdocs/ligue1/Vues/v_admin_create_article.php</file>
+            <file>file:/C:/xampp/htdocs/ligue1/Vues/v_create_article.php</file>
+            <file>file:/C:/xampp/htdocs/ligue1/Vues/v_clubs.php</file>
             <file>file:/C:/xampp/htdocs/ligue1/Controleur/c_create_article.php</file>
-            <file>file:/C:/xampp/htdocs/ligue1/Controleur/c_blacklist.php</file>
-            <file>file:/C:/xampp/htdocs/ligue1/config/update/mots_interdits.txt</file>
+            <file>file:/C:/xampp/htdocs/ligue1/Controleur/c_voir_article.php</file>
+            <file>file:/C:/xampp/htdocs/ligue1/Vues/v_create_commentaire.php</file>
+            <file>file:/C:/xampp/htdocs/ligue1/Vues/v_profil.php</file>
+            <file>file:/C:/xampp/htdocs/ligue1/Controleur/c_article.php</file>
+            <file>file:/C:/xampp/htdocs/ligue1/Models/GestionUtilisateur.php</file>
+            <file>file:/C:/xampp/htdocs/ligue1/Vues/v_article.php</file>
         </group>
     </open-files>
 </project-private>

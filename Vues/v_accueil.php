@@ -26,25 +26,6 @@
                 margin: 20px auto;
             }
 
-            .article-item {
-                display: flex;
-                flex-direction: column;
-                background-color: #fff;
-                border-radius: 8px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                border: 1px solid #ddd;
-                margin-bottom: 20px;
-                overflow: hidden;
-            }
-
-            .article-item img {
-                width: 200px;
-                height: 200px;
-                border-radius: 8px;
-                margin-right: 15px;
-                object-fit: cover;
-            }
-
             .card-body {
                 display: flex;
                 flex-direction: column;
@@ -138,7 +119,7 @@
     </head>
     <body>
         <div class="container mt-5">
-            <div class="jumbotron bg-light p-5 rounded-lg custom-jumbotron text-right">
+            <div class="custom-jumbotron">
                 <h1 class="display-4">Bienvenue sur Ligue1</h1>
                 <p class="lead">Cette plateforme vous permet de gérer vos inscriptions, consulter les informations des clubs, et bien plus encore.</p>
                 <hr class="my-4">
@@ -150,13 +131,69 @@
             </div>
         </div>
 
+        <?php
+        // Ensure $actualites is defined to avoid undefined variable errors
+        $actualites = $actualites ?? [];
+        ?>
+
+        <div id="carouselExampleIndicators" class="carousel slide mt-5" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <?php foreach ($actualites as $index => $actualite): ?>
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="<?php echo $index; ?>" class="<?php echo $index === 0 ? 'active' : ''; ?>" aria-label="Slide <?php echo $index + 1; ?>"></button>
+                <?php endforeach; ?>
+            </div>
+            <div class="carousel-inner">
+                <?php foreach ($actualites as $index => $actualite): ?>
+                    <div class="carousel-item <?php echo $index === 0 ? 'active' : ''; ?>">
+                        <img src="<?php echo htmlspecialchars($actualite['image']); ?>" class="d-block w-100" alt="Image de l'actualité">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5><?php echo htmlspecialchars($actualite['titre']); ?></h5>
+                            <p><?php echo htmlspecialchars($actualite['description']); ?></p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Précédent</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Suivant</span>
+            </button>
+        </div>
+
         <div class="container mt-5">
-            <h2 class="mb-4">Liste des articles</h2>
+            <h2 class="mb-4">Dernières Actualités</h2>
             <div class="row g-4">
-                <?php if ($articles): ?>
+                <?php if (!empty($actualites)): ?>
+                    <?php foreach ($actualites as $actualite): ?>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="card h-100 shadow-sm">
+                                <img src="<?php echo !empty($actualite['image']) ? htmlspecialchars($actualite['image'], ENT_QUOTES, 'UTF-8') : '/ligue1/img/placeholder.jpg'; ?>" 
+                                     alt="Image de l'actualité" class="card-img-top" style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title"><?php echo htmlspecialchars($actualite['titre'], ENT_QUOTES, 'UTF-8'); ?></h5>
+                                    <p class="card-text"><?php echo nl2br(htmlspecialchars(substr($actualite['contenu'], 0, 150), ENT_QUOTES, 'UTF-8')); ?>...</p>
+                                    <p class="card-text"><small class="text-muted">Publié le <?php echo htmlspecialchars($actualite['date_publication'], ENT_QUOTES, 'UTF-8'); ?></small></p>
+                                    <a href="/ligue1/actualites" class="btn btn-primary">Lire la suite</a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <p>Aucune actualité disponible pour le moment.</p>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <div class="container mt-5">
+            <h2 class="mb-4">Liste des Articles</h2>
+            <div class="row g-4">
+                <?php if (!empty($articles)): ?>
                     <?php foreach ($articles as $articleItem): ?>
                         <div class="col-lg-4 col-md-6">
-                            <div class="article-item border p-3 rounded shadow-sm bg-white">
+                            <div class="article-item p-3 rounded shadow-sm">
                                 <img src="<?php echo htmlspecialchars($articleItem['image'], ENT_QUOTES, 'UTF-8'); ?>" alt="Image de l'article" class="img-fluid rounded mb-3">
                                 <div class="article-content">
                                     <h3 class="h5"><?php echo htmlspecialchars($articleItem['titre'], ENT_QUOTES, 'UTF-8'); ?></h3>
@@ -199,5 +236,7 @@
                 <?php endif; ?>
             </div>
         </div>
+
+        <?php include_once __DIR__ . '/../footer.php'; ?>
     </body>
 </html>
