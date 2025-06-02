@@ -1,0 +1,2 @@
+ALTER TABLE club
+ADD COLUMN id_stade INT REFERENCES stade(id_stade) ON DELETE SET NULL;
