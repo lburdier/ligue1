@@ -1,94 +1,96 @@
-# Projet Ligue 1
+**English** · [Français](README.fr.md)
+
+# Ligue 1 Project
 
 ## Description
-Ligue 1 est un projet PHP permettant de gérer les données liées à la Ligue 1 de football. Le projet utilise une architecture MVC (Modèle-Vue-Contrôleur) pour garantir une meilleure organisation du code et faciliter les évolutions futures.
 
-Le projet est conçu pour fonctionner sur un environnement local avec XAMPP et s'articule autour de plusieurs fonctionnalités, incluant des interfaces utilisateur, des systèmes de gestion de bases de données et une navigation dynamique grâce à un routeur personnalisé.
+Ligue 1 is a PHP project for managing data about the French Ligue 1 football league. It uses an MVC (Model-View-Controller) architecture to keep the code organised and make it easier to evolve.
 
-## Structure du projet
-Voici une vue d'ensemble de la structure du projet :
+It is designed to run locally with XAMPP and includes user interfaces, database management and dynamic navigation through a custom router.
+
+## Project structure
 
 ```
 Ligue1/
-|-- avatars/          # Contient les avatars des utilisateurs
-|-- config/           # Configuration du projet (fichiers de paramètres)
-|-- Controleur/       # Contient les contrôleurs (logique d'application)
-|-- img/              # Images statiques utilisées dans le projet
-|-- logs/             # Journaux d'erreurs ou d'activité
-|-- Models/           # Contient les modèles (gestion des données et interactions avec la base de données)
-|-- nbproject/        # Fichiers de projet NetBeans (si applicable)
-|-- style/            # Feuilles de style (CSS)
-|-- Vues/             # Contient les fichiers de vues (interfaces utilisateur)
-|-- .htaccess         # Configuration Apache pour la réécriture des URL
-|-- check_email.php   # Validation des emails
-|-- footer.php        # Pied de page commun
-|-- index.php         # Point d'entrée principal du projet
-|-- logout.php        # Gestion de la déconnexion
-|-- menu.php          # Menu de navigation commun
-|-- Router.php        # Gestion des routes du projet
-|-- utils.php         # Fonctions utilitaires communes
+|-- avatars/          # User avatars
+|-- config/           # Project configuration (settings files)
+|-- Controleur/       # Controllers (application logic)
+|-- img/              # Static images
+|-- logs/             # Error and activity logs
+|-- Models/           # Models (data handling and database access)
+|-- nbproject/        # NetBeans project files (if applicable)
+|-- style/            # Stylesheets (CSS)
+|-- Vues/             # Views (user interfaces)
+|-- .htaccess         # Apache URL rewriting
+|-- check_email.php   # Email validation
+|-- footer.php        # Shared footer
+|-- index.php         # Main entry point
+|-- logout.php        # Logout handling
+|-- menu.php          # Shared navigation menu
+|-- Router.php        # Routing
+|-- utils.php         # Shared helper functions
 ```
 
-## Fonctionnalités principales
+## Main features
 
-- **Validation d'email** :
-  Le fichier `check_email.php` permet de vérifier la validité des emails soumis par les utilisateurs.
+- **Email validation**:
+  `check_email.php` checks the emails submitted by users.
 
-- **Gestion des sessions** :
-  Le fichier `logout.php` permet de déconnecter un utilisateur en toute sécurité.
+- **Session handling**:
+  `logout.php` logs a user out securely.
 
-- **Système de navigation** :
-  Le fichier `Router.php` gère la répartition des requêtes vers les bons contrôleurs et actions.
+- **Navigation**:
+  `Router.php` dispatches requests to the right controllers and actions.
 
-- **Architecture MVC** :
-  Le projet est divisé en trois grandes couches :
-  - **Modèle** : Situé dans le dossier `Models`, il gère les interactions avec la base de données.
-  - **Vue** : Situé dans le dossier `Vues`, il gère l'affichage des interfaces utilisateur.
-  - **Contrôleur** : Situé dans le dossier `Controleur`, il gère la logique d'application et relie les modèles aux vues.
+- **MVC architecture**, split into three layers:
+  - **Model** (`Models/`): database access.
+  - **View** (`Vues/`): user interfaces.
+  - **Controller** (`Controleur/`): application logic, linking models and views.
 
-- **Gestion des journaux** :
-  Le dossier `logs` permet de stocker les fichiers de logs pour le suivi des erreurs ou des événements.
+- **Logging**:
+  the `logs/` folder stores log files to track errors and events.
 
-## Prérequis
+## Requirements
 
-- **Serveur web** : Apache (inclus dans XAMPP)
-- **PHP** : Version 7.4 ou supérieure
-- **Base de données** : MySQL (inclus dans XAMPP)
-- **Navigateurs** : Tout navigateur récent compatible avec les standards modernes (Chrome, Firefox, Edge, etc.)
+- **Web server**: Apache (included in XAMPP)
+- **PHP**: 7.4 or higher
+- **Database**: MySQL (included in XAMPP)
+- **Browser**: any recent browser (Chrome, Firefox, Edge, etc.)
 
 ## Installation
 
-1. Clonez ce dépôt dans le répertoire `htdocs` de XAMPP :
+1. Clone this repository into XAMPP's `htdocs` folder:
    ```bash
-   git clone https://github.com/votre-utilisateur/ligue1.git
+   git clone https://github.com/lburdier/ligue1.git
    ```
 
-2. Importez la base de données en utilisant le fichier SQL approprié fourni avec le projet :
+2. Import the database with the SQL file provided with the project:
    ```bash
    mysql -u root -p < createLigue1_v2.sql
    ```
 
-3. Démarrez le serveur Apache et MySQL via XAMPP.
+3. Start Apache and MySQL from XAMPP.
 
-4. Accédez à l'application depuis votre navigateur à l'adresse suivante :
+4. Open the app in your browser:
    ```
    http://localhost/ligue1
    ```
 
-## Contribution
+## Contributing
 
-Les contributions sont les bienvenues ! Veuillez suivre les étapes suivantes :
+Contributions are welcome:
 
-1. Forkez ce dépôt.
-2. Créez une branche pour votre fonctionnalité :
+1. Fork this repository.
+2. Create a branch for your feature:
    ```bash
-   git checkout -b nouvelle-fonctionnalite
+   git checkout -b my-feature
    ```
-3. Soumettez vos modifications via une Pull Request.
+3. Open a pull request.
 
-## Auteur
-Projet réalisé par Lucas Burdier dans le cadre d'une application PHP pour la gestion de données sportives.
+## Author
 
-## Licence
-Ce projet est sous licence [MIT](LICENSE).
+Built by Lucas Burdier, as a PHP application for managing sports data.
 
+## License
+
+This project is licensed under the [MIT](LICENSE) license.
